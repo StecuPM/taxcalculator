@@ -6,25 +6,37 @@ import java.text.DecimalFormat;
 
 public class TaxCalculator {
 
+	// Tax rates constants
+	private static final double SOCIAL_SECURITY_RATE = 9.76;
+	private static final double HEALTH_SECURITY_RATE = 1.5;
+	private static final double SICK_SECURITY_RATE = 2.45;
+	private static final double HEALTH_INSURANCE_RATE_9 = 9.0;
+	private static final double HEALTH_INSURANCE_RATE_775 = 7.75;
+	private static final double ADVANCE_TAX_RATE = 18.0;
+	private static final double CIVIL_CONTRACT_DEDUCTION_RATE = 20.0;
+
+	// Fixed values
+	private static final double EMPLOYMENT_TAX_DEDUCTIBLE = 111.25;
+	private static final double EMPLOYMENT_TAX_FREE_INCOME = 46.33;
+
+	// Input data
 	private static double income = 0;
 	private static char contractType = ' ';
 
-	// social security taxes
+	// Calculated taxes
 	private static double socialSecurity = 0;
 	private static double socialHealthSecurity = 0;
 	private static double socialSickSecurity = 0;
-
-	// health-related taxes
-	private static double taxDeductibleExpenses = 111.25;
+	private static double taxDeductibleExpenses = 0;
 	private static double healthInsurance9 = 0;
 	private static double healthInsurance775 = 0;
 	private static double advanceTax = 0;
-	private static double taxFreeIncome = 46.33;
+	private static double taxFreeIncome = 0;
 	private static double advanceTaxPaid = 0;
 	private static double advanceTaxPaidRounded = 0;
 
-	private static DecimalFormat formatTwoDecimals = new DecimalFormat("#.00");
-	private static DecimalFormat formatNoDecimals = new DecimalFormat("#");
+	private static final DecimalFormat FORMAT_TWO_DECIMALS = new DecimalFormat("#.00");
+	private static final DecimalFormat FORMAT_NO_DECIMALS = new DecimalFormat("#");
 
 	public static void main(String[] args) {
 		if (!readUserInput()) {
@@ -42,8 +54,7 @@ public class TaxCalculator {
 
 	private static boolean readUserInput() {
 		try {
-			InputStreamReader isr = new InputStreamReader(System.in);
-			BufferedReader br = new BufferedReader(isr);
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 			System.out.print("Enter income: ");
 			income = Double.parseDouble(br.readLine());
@@ -72,16 +83,19 @@ public class TaxCalculator {
 		calculateHealthInsurance(reducedIncome);
 		printHealthInsurance();
 
+		taxDeductibleExpenses = EMPLOYMENT_TAX_DEDUCTIBLE;
+		taxFreeIncome = EMPLOYMENT_TAX_FREE_INCOME;
+
 		System.out.println("Tax deductible expenses: " + taxDeductibleExpenses);
 
 		double taxableIncomeRounded = calculateAndPrintTaxableIncome(reducedIncome);
 
 		calculateAdvanceTax(taxableIncomeRounded);
-		System.out.println("Advance tax 18%: " + advanceTax);
+		System.out.println("Advance tax " + ADVANCE_TAX_RATE + "%: " + advanceTax);
 		System.out.println("Tax free income: " + taxFreeIncome);
 
 		double reducedTax = advanceTax - taxFreeIncome;
-		System.out.println("Reduced tax: " + formatTwoDecimals.format(reducedTax));
+		System.out.println("Reduced tax: " + FORMAT_TWO_DECIMALS.format(reducedTax));
 
 		calculateAdvanceTaxPaid();
 		printAdvanceTaxPaid();
@@ -102,16 +116,16 @@ public class TaxCalculator {
 		printHealthInsurance();
 
 		taxFreeIncome = 0;
-		taxDeductibleExpenses = (reducedIncome * 20) / 100;
+		taxDeductibleExpenses = (reducedIncome * CIVIL_CONTRACT_DEDUCTION_RATE) / 100;
 		System.out.println("Tax deductible expenses: " + taxDeductibleExpenses);
 
 		double taxableIncomeRounded = calculateAndPrintTaxableIncome(reducedIncome);
 
 		calculateAdvanceTax(taxableIncomeRounded);
-		System.out.println("Advance tax 18%: " + advanceTax);
+		System.out.println("Advance tax " + ADVANCE_TAX_RATE + "%: " + advanceTax);
 
 		double reducedTax = advanceTax - taxFreeIncome;
-		System.out.println("Tax to be paid: " + formatTwoDecimals.format(reducedTax));
+		System.out.println("Tax to be paid: " + FORMAT_TWO_DECIMALS.format(reducedTax));
 
 		calculateAdvanceTaxPaid();
 		printAdvanceTaxPaid();
@@ -120,34 +134,36 @@ public class TaxCalculator {
 	}
 
 	private static void printSocialSecurityTaxes() {
-		System.out.println("Social security tax: " + formatTwoDecimals.format(socialSecurity));
-		System.out.println("Health social security tax: " + formatTwoDecimals.format(socialHealthSecurity));
-		System.out.println("Sickness social security tax: " + formatTwoDecimals.format(socialSickSecurity));
+		System.out.println("Social security tax: " + FORMAT_TWO_DECIMALS.format(socialSecurity));
+		System.out.println("Health social security tax: " + FORMAT_TWO_DECIMALS.format(socialHealthSecurity));
+		System.out.println("Sickness social security tax: " + FORMAT_TWO_DECIMALS.format(socialSickSecurity));
 	}
 
 	private static void printHealthInsurance() {
-		System.out.println("Health security tax: 9% = " + formatTwoDecimals.format(healthInsurance9) +
-				" 7.75% = " + formatTwoDecimals.format(healthInsurance775));
+		System.out.println("Health security tax: " + HEALTH_INSURANCE_RATE_9 + "% = " +
+				FORMAT_TWO_DECIMALS.format(healthInsurance9) + " " + HEALTH_INSURANCE_RATE_775 + "% = " +
+				FORMAT_TWO_DECIMALS.format(healthInsurance775));
 	}
 
 	private static double calculateAndPrintTaxableIncome(double reducedIncome) {
 		double taxableIncome = reducedIncome - taxDeductibleExpenses;
-		double taxableIncomeRounded = Double.parseDouble(formatNoDecimals.format(taxableIncome));
-		System.out.println("Taxable income: " + taxableIncome + " rounded: " + formatNoDecimals.format(taxableIncomeRounded));
+		double taxableIncomeRounded = Double.parseDouble(FORMAT_NO_DECIMALS.format(taxableIncome));
+		System.out.println("Taxable income: " + taxableIncome + " rounded: " +
+				FORMAT_NO_DECIMALS.format(taxableIncomeRounded));
 		return taxableIncomeRounded;
 	}
 
 	private static void printAdvanceTaxPaid() {
-		advanceTaxPaidRounded = Double.parseDouble(formatNoDecimals.format(advanceTaxPaid));
-		System.out.println("Advance tax paid: " + formatTwoDecimals.format(advanceTaxPaid) +
-				" rounded: " + formatNoDecimals.format(advanceTaxPaidRounded));
+		advanceTaxPaidRounded = Double.parseDouble(FORMAT_NO_DECIMALS.format(advanceTaxPaid));
+		System.out.println("Advance tax paid: " + FORMAT_TWO_DECIMALS.format(advanceTaxPaid) +
+				" rounded: " + FORMAT_NO_DECIMALS.format(advanceTaxPaidRounded));
 	}
 
 	private static void printNetIncome() {
 		double netIncome = income - ((socialSecurity + socialHealthSecurity + socialSickSecurity) +
 				healthInsurance9 + advanceTaxPaidRounded);
 		System.out.println();
-		System.out.println("Net income: " + formatTwoDecimals.format(netIncome));
+		System.out.println("Net income: " + FORMAT_TWO_DECIMALS.format(netIncome));
 	}
 
 	private static void calculateAdvanceTaxPaid() {
@@ -155,18 +171,18 @@ public class TaxCalculator {
 	}
 
 	private static void calculateAdvanceTax(double income) {
-		advanceTax = (income * 18) / 100;
+		advanceTax = (income * ADVANCE_TAX_RATE) / 100;
 	}
 
 	private static double calculateReducedIncome(double income) {
-		socialSecurity = (income * 9.76) / 100;
-		socialHealthSecurity = (income * 1.5) / 100;
-		socialSickSecurity = (income * 2.45) / 100;
+		socialSecurity = (income * SOCIAL_SECURITY_RATE) / 100;
+		socialHealthSecurity = (income * HEALTH_SECURITY_RATE) / 100;
+		socialSickSecurity = (income * SICK_SECURITY_RATE) / 100;
 		return (income - socialSecurity - socialHealthSecurity - socialSickSecurity);
 	}
 
 	private static void calculateHealthInsurance(double income) {
-		healthInsurance9 = (income * 9) / 100;
-		healthInsurance775 = (income * 7.75) / 100;
+		healthInsurance9 = (income * HEALTH_INSURANCE_RATE_9) / 100;
+		healthInsurance775 = (income * HEALTH_INSURANCE_RATE_775) / 100;
 	}
 }

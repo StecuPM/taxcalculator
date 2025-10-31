@@ -47,3 +47,31 @@ Single Responsibility: Each method does one thing
 Readability - main() is easier to understand
 changes to output format require editing only one place
 Smaller methods are easier to test
+
+# Add constants and other improvements
+1. Replaced magic numbers with named constants
+9.76 - SOCIAL_SECURITY_RATE
+1.5 - HEALTH_SECURITY_RATE
+2.45 - SICK_SECURITY_RATE
+9.0 - HEALTH_INSURANCE_RATE_9
+7.75 - HEALTH_INSURANCE_RATE_775
+18.0 - ADVANCE_TAX_RATE
+20.0 - CIVIL_CONTRACT_DEDUCTION_RATE
+111.25 - EMPLOYMENT_TAX_DEDUCTIBLE
+46.33 - EMPLOYMENT_TAX_FREE_INCOME
+2. Improved formatting constants (now final and uppercase)
+formatTwoDecimals changed to FORMAT_TWO_DECIMALS
+formatNoDecimals changed to FORMAT_NO_DECIMALS
+3. Better variable organization
+Grouped constants by purpose (rates, fixed values)
+Clear comments for each group
+Constants are now private static final
+4. Minor improvements
+Simplified BufferedReader initialization
+Used constants in output messages
+5. Why:
+No magic numbers -easier to find and modify
+Constants names explain what values mean
+Changing tax rates requires editing only one place
+Following Java naming conventions for constants
+Easier to adapt for potential tax changes
