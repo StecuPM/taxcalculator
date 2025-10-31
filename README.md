@@ -1,7 +1,7 @@
 # taxcalculator
 TaxCalculator - a kata for a Clean Code exercise
 
-Fixed compilation errors and improved naming
+# Fixed compilation errors and improved naming
 1. Fixed compilation errors:
 -duplicate declaration of advanceTaxPaidadvanceTax
 -Renamed to proper variables advanceTax and advanceTaxPaid
@@ -22,3 +22,28 @@ df00 - formatTwoDecimals
 d_income - reducedIncome
 4. Better output messages:
 -"Incorrect" changed to "Incorrect input"
+
+
+# Extracted methods and reduced code duplication
+1. Extracted 3 methods from main():
+readUserInput() - handles all user input logic
+processEmploymentContract() - handles employment contract flow
+processCivilContract() - handles civil contract flow
+2. Created display methods
+printSocialSecurityTaxes() - prints all social security taxes
+printHealthInsurance() - prints health insurance info
+printAdvanceTaxPaid() - prints advance tax information
+printNetIncome() - calculates and prints net income
+calculateAndPrintTaxableIncome() - reduces duplication
+3. Better encapsulation
+Changed public to private
+All methods except main() are now private
+4. Simplified main()
+Now only 10 lines - more readable
+Separation of concerns
+Each method has a single responsibility
+5. Why:
+Single Responsibility: Each method does one thing
+Readability - main() is easier to understand
+changes to output format require editing only one place
+Smaller methods are easier to test
