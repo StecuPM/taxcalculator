@@ -7,33 +7,33 @@ import java.text.DecimalFormat;
 public class TaxCalculator {
 
 	// Tax rates constants
-	private static final double SOCIAL_SECURITY_RATE = 9.76;
-	private static final double HEALTH_SECURITY_RATE = 1.5;
-	private static final double SICK_SECURITY_RATE = 2.45;
-	private static final double HEALTH_INSURANCE_RATE_9 = 9.0;
-	private static final double HEALTH_INSURANCE_RATE_775 = 7.75;
-	private static final double ADVANCE_TAX_RATE = 18.0;
-	private static final double CIVIL_CONTRACT_DEDUCTION_RATE = 20.0;
+	static final double SOCIAL_SECURITY_RATE = 9.76;
+	static final double HEALTH_SECURITY_RATE = 1.5;
+	static final double SICK_SECURITY_RATE = 2.45;
+	static final double HEALTH_INSURANCE_RATE_9 = 9.0;
+	static final double HEALTH_INSURANCE_RATE_775 = 7.75;
+	static final double ADVANCE_TAX_RATE = 18.0;
+	static final double CIVIL_CONTRACT_DEDUCTION_RATE = 20.0;
 
 	// Fixed values
-	private static final double EMPLOYMENT_TAX_DEDUCTIBLE = 111.25;
-	private static final double EMPLOYMENT_TAX_FREE_INCOME = 46.33;
+	static final double EMPLOYMENT_TAX_DEDUCTIBLE = 111.25;
+	static final double EMPLOYMENT_TAX_FREE_INCOME = 46.33;
 
 	// Input data
 	private static double income = 0;
 	private static char contractType = ' ';
 
-	// Calculated taxes
-	private static double socialSecurity = 0;
-	private static double socialHealthSecurity = 0;
-	private static double socialSickSecurity = 0;
-	private static double taxDeductibleExpenses = 0;
-	private static double healthInsurance9 = 0;
-	private static double healthInsurance775 = 0;
-	private static double advanceTax = 0;
-	private static double taxFreeIncome = 0;
-	private static double advanceTaxPaid = 0;
-	private static double advanceTaxPaidRounded = 0;
+	// Calculated taxes (package-private for testing)
+	static double socialSecurity = 0;
+	static double socialHealthSecurity = 0;
+	static double socialSickSecurity = 0;
+	static double taxDeductibleExpenses = 0;
+	static double healthInsurance9 = 0;
+	static double healthInsurance775 = 0;
+	static double advanceTax = 0;
+	static double taxFreeIncome = 0;
+	static double advanceTaxPaid = 0;
+	static double advanceTaxPaidRounded = 0;
 
 	private static final DecimalFormat FORMAT_TWO_DECIMALS = new DecimalFormat("#.00");
 	private static final DecimalFormat FORMAT_NO_DECIMALS = new DecimalFormat("#");
@@ -166,22 +166,22 @@ public class TaxCalculator {
 		System.out.println("Net income: " + FORMAT_TWO_DECIMALS.format(netIncome));
 	}
 
-	private static void calculateAdvanceTaxPaid() {
+	static void calculateAdvanceTaxPaid() {
 		advanceTaxPaid = advanceTax - healthInsurance775 - taxFreeIncome;
 	}
 
-	private static void calculateAdvanceTax(double income) {
+	static void calculateAdvanceTax(double income) {
 		advanceTax = (income * ADVANCE_TAX_RATE) / 100;
 	}
 
-	private static double calculateReducedIncome(double income) {
+	static double calculateReducedIncome(double income) {
 		socialSecurity = (income * SOCIAL_SECURITY_RATE) / 100;
 		socialHealthSecurity = (income * HEALTH_SECURITY_RATE) / 100;
 		socialSickSecurity = (income * SICK_SECURITY_RATE) / 100;
 		return (income - socialSecurity - socialHealthSecurity - socialSickSecurity);
 	}
 
-	private static void calculateHealthInsurance(double income) {
+	static void calculateHealthInsurance(double income) {
 		healthInsurance9 = (income * HEALTH_INSURANCE_RATE_9) / 100;
 		healthInsurance775 = (income * HEALTH_INSURANCE_RATE_775) / 100;
 	}
