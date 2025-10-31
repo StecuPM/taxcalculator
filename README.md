@@ -53,7 +53,7 @@ Fixed bugs that prevented compilation for correctness
 
 Clear variable names reduce need for comments (readability)
 
-### Extracted methods and reduced code duplication
+## Extracted methods and reduced code duplication
 
 ### Extracted 3 methods from main():
 
@@ -174,12 +174,19 @@ Easier to adapt for potential tax changes
 ### Test coverage includes:
 
 -testCalculateReducedIncome_StandardCase() - verifies social security deductions
+
 -testCalculateHealthInsurance() - tests health insurance calculations
+
 -testCalculateAdvanceTax() - validates advance tax rate
+
 -testCalculateAdvanceTaxPaid_Employment() - employment contract specific
+
 -testCalculateAdvanceTaxPaid_Civil() - civil contract specific
+
 -testSocialSecurityCalculation() - comprehensive social security test
+
 -testTaxRatesConstants() - validates all rate constants
+
 -testEmploymentContractConstants() - validates employment constants
 
 ### Why:
